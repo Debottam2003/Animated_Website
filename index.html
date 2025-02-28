@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="./style.css"> -->
+    <style>
+      body,
+      html {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .hero {
+        width: 100%;
+        height: 100vh;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        flex-direction: column;
+      }
+
+      footer {
+        background-color: #212121;
+        color: aliceblue;
+        font-family: Arial, Helvetica, sans-serif;
+        padding: 15px;
+      }
+
+      .text {
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+        color: rgb(255, 255, 255);
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 2rem;
+        font-weight: bolder;
+        text-align: center;
+        padding: 10px;
+      }
+
+      .slider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: background-image 0.5s;
+        flex-wrap: wrap;
+      }
+
+      .slider-image {
+        width: 100px;
+        height: 150px;
+        border-radius: 20px;
+        box-shadow: 0 5px 10px 0 rgba(255, 255, 255, 0.74);
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: background-image 0.5s;
+      }
+
+      .buttons {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        background-color: #212121;
+        flex-wrap: wrap;
+      }
+
+      button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #415fe6;
+        color: aliceblue;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #2e3f9e;
+      }
+
+      /* Media Queries */
+      @media (max-width: 768px) {
+        .text {
+          font-size: 1.5rem;
+        }
+
+        .slider-image {
+          width: 80px;
+          height: 120px;
+        }
+
+        button {
+          font-size: 0.875rem;
+          padding: 8px 16px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .text {
+          font-size: 1.2rem;
+        }
+
+        .slider-image {
+          width: 60px;
+          height: 90px;
+        }
+
+        button {
+          font-size: 0.75rem;
+          padding: 6px 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <div class="text">Sritama weds Debangsu 💖</div>
+      <div class="slider"></div>
+    </div>
+    <!-- <div class="buttons">
+        <button>Prev</button>
+        <button>Next</button>
+    </div> -->
+    <footer></footer>
+    <!-- <script src="script.js"></script> -->
+    <script>
+      let images = [];
+      for (let i = 1; i <= 19; i++) {
+        if (i < 10) {
+          images.push(`./compressed/image0${i}.png`);
+          continue;
+        } else {
+          images.push(`./compressed/image${i}.png`);
+        }
+      }
+
+      let date = new Date();
+      let hero = document.querySelector(".hero");
+      let slider = document.querySelector(".slider");
+      let footer = document.getElementsByTagName("footer");
+
+      footer[0].innerText = `@Debottam Kar ${date.toLocaleDateString()}`;
+      hero.style.backgroundImage = `url(${images[images.length - 1]})`;
+
+      // Add initial images
+      for (let i = 0; i < 4; i++) {
+        let img = document.createElement("div");
+        img.style.backgroundImage = `url(${images[i]})`;
+        img.classList.add("slider-image");
+        slider.appendChild(img);
+      }
+
+      let prevCounter = 0;
+      let nextCounter = 4;
+
+      setInterval(() => {
+        if (nextCounter >= images.length) {
+          nextCounter = 0;
+        }
+        if (prevCounter >= images.length) {
+          prevCounter = 0;
+        }
+
+        // Update hero image
+        hero.style.backgroundImage = `url(${images[prevCounter]})`;
+
+        // Remove the first child (oldest image)
+        let firstImage = slider.firstElementChild;
+        if (firstImage) {
+          slider.removeChild(firstImage);
+        }
+
+        // Add a new image to the slider
+        let img = document.createElement("div");
+        img.style.backgroundImage = `url(${images[nextCounter]})`;
+        img.classList.add("slider-image");
+        slider.appendChild(img);
+
+        prevCounter++;
+        nextCounter++;
+      }, 4000);
+
+      // window.addEventListener('load', ()=>{
+      //     // let audio = new Audio('./assets/love.mp3');
+      //     // audio.loop = true;
+      //     // audio.muted = true; // Initially muted to comply with autoplay policies
+      //     // audio.play().then(() => {
+      //     //     audio.muted = false; // Unmute after autoplay starts
+      //     // }).catch(err => {
+      //     //     console.log("Autoplay failed:", err);
+      //     // });
+      //     let audio = document.createElement('audio');
+      //     let body = document.querySelector('body');
+      //     body.appendChild(audio);
+      //     audio.src = './assets/love.mp3';
+      //     audio.loop = true;
+      //     audio.play();
+      // });
+      window.addEventListener("load", () => {
+        let audio = document.createElement("audio");
+        audio.src = "./assets/love.mp3";
+        audio.loop = true;
+        audio.muted = true; // Start muted to comply with autoplay policies
+        document.body.appendChild(audio);
+
+        // Attempt autoplay (muted)
+        audio
+          .play()
+          .then(() => {
+            console.log("Muted autoplay started.");
+          })
+          .catch((err) => {
+            console.log("Autoplay blocked. Waiting for user interaction.");
+          });
+
+        // Unmute and play on user interaction
+        const enableAudio = () => {
+          audio.muted = false;
+          audio
+            .play()
+            .then(() => {
+              console.log("Audio playing with user interaction.");
+            })
+            .catch((err) => {
+              console.log("Audio failed to play:", err);
+            });
+          document.removeEventListener("click", enableAudio); // Remove listener after first click
+        };
+
+        document.addEventListener("click", enableAudio); // Play audio when the user clicks
+      });
+    </script>
+  </body>
+</html>
